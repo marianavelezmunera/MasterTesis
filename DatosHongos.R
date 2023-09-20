@@ -1,11 +1,29 @@
-# Data hongos
+# Objeto phyloseq 
 
-# Tabla de ASVs
-# Tabla de taxonomía
-# Árbol
+hongos<-qza_to_phyloseq(features = "TablaDADA2HongosForward.qza",tree="ArbolRooted.qza",taxonomy = "TaxonomiaHongos.qza")
 
-# Metadatos 
+metadatos_hongos<-as.data.frame(metadatos_hongos)
+rownames(metadatos_hongos)<-metadatos_hongos$id
+rownames(metadatos_hongos)
+metadatos_hongos$Parcela<-as.character(metadatos_hongos$Parcela)
+metadatos_hongos$Altitud<-as.character(metadatos_hongos$Altitud)
+sample_data(hongos)<-metadatos_hongos
 
-metadatos_hongos <- read_delim("~/Cosas de la maestría/TESIS/Datos/metadatos_hongos.txt",delim = "\t", escape_double = FALSE,col_types = cols(Transecto = col_skip(),Individuo = col_skip(), Distribucion_Cm = col_skip(),Distribucion_grados = col_skip(),Distribucion_ind = col_skip(), Fecha = col_skip(),HOBO_correspondiente = col_skip()),trim_ws = TRUE)
+# Objetos individuales
 
-metadatos_hongos<-metadatos_hongos[-c(31,36,37),]
+ASV<-as.data.frame(otu_table(hongos))
+taxonomy<-as.data.frame(tax_table(hongos))
+
+# Mirar si hay que filtrar
+unique(taxonomy$Phylum)
+unique(taxonomy$Kingdom)
+
+# Reemplazar "Fungi_phy_Incertae_sedis" por NA
+
+hongos@tax_table[hongos@tax_table=="Fungi_phy_Incertae_sedis"]<-NA
+
+
+# Objeto sin controles
+
+hongos_bien<-subset_samples(hongos,ID_individuo!="Control")
+hongos_bien
