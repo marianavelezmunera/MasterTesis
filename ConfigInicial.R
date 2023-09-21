@@ -22,3 +22,7 @@ library(gtable)
 library(gtExtras)
 library(patchwork)
 library(qiime2R)
+
+font_add_google("Rubik","Rubik")
+font.families()
+showtext_auto()

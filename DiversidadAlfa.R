@@ -14,39 +14,77 @@ colnames(diversidad_alfa)
 
 # Plots
 # Observed
-ggplot(data = diversidad_alfa,aes(x=Tipo_muestra,y=observed))+
-  geom_boxplot()
+ggplot(data = diversidad_alfa,aes(x=Tipo_muestra,y=observed,fill=Tipo_muestra))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Sample type")+ylab("Richness")+
+  theme(legend.position = "none")+
+  scale_fill_manual(values=met.brewer("Klimt",3))+
+  scale_x_discrete(labels=c("Phyllosphere","Rhizosphere","Bulk soil"))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))
+ggsave("observed_sample.png",last_plot())
 
-ggplot(data = diversidad_alfa,aes(x=Parcela, y=observed))+
-  geom_boxplot()
-
-ggplot(data = diversidad_alfa,aes(x=Altitud, y=observed))+
-  geom_boxplot()
+ggplot(data = diversidad_alfa,aes(x=Altitud, y=observed,fill=Altitud))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Elevation")+ylab("Richness")+
+  theme(legend.position = "none")+
+  scale_fill_manual(values=met.brewer("Klimt",5,override.order = FALSE))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))
+ggsave("observed_elevation.png",last_plot())
 
 #Shannon
-ggplot(data = diversidad_alfa,aes(x=Tipo_muestra,y=diversity_shannon))+
-  geom_boxplot()
 
-ggplot(data = diversidad_alfa,aes(x=Parcela, y=diversity_shannon))+
-  geom_boxplot()
-
-ggplot(data = diversidad_alfa,aes(x=Altitud, y=diversity_shannon))+
-  geom_boxplot()
+ggplot(data = diversidad_alfa,aes(x=Tipo_muestra,y=diversity_shannon,fill=Tipo_muestra))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Sample type")+ylab("Shannon index")+
+  theme(legend.position = "none")+
+  scale_fill_manual(values=met.brewer("Klimt",3))+
+  scale_x_discrete(labels=c("Phyllosphere","Rhizosphere","Bulk soil"))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))
+ggsave("shannon_sample.png",last_plot())
+  
+ggplot(data = diversidad_alfa,aes(x=Altitud, y=diversity_shannon,fill=Altitud))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Elevation")+ylab("Shannon Index") +
+  theme(legend.position = "none")+
+  scale_fill_manual(values=met.brewer("Klimt",5))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))
+ggsave("shannon_elevation.png",last_plot())
 
 # Faiths PD
 
-ggplot(data = diversidad_alfa,aes(x=Tipo_muestra,y=faith_pd))+
-  geom_boxplot()
+ggplot(data = diversidad_alfa,aes(x=Tipo_muestra,y=faith_pd,fill=Tipo_muestra))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Sample type")+ylab("Faith's PD")+
+  theme(legend.position = "none")+
+  scale_fill_manual(values=met.brewer("Klimt",3))+
+  scale_x_discrete(labels=c("Phyllosphere","Rhizosphere","Bulk soil"))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))
+ggsave("faith_sample.png",last_plot())
 
-ggplot(data = diversidad_alfa,aes(x=Parcela, y=faith_pd))+
-  geom_boxplot()
-
-ggplot(data = diversidad_alfa,aes(x=Altitud, y=faith_pd))+
-  geom_boxplot()
+ggplot(data = diversidad_alfa,aes(x=Altitud, y=faith_pd,fill=Altitud))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Elevation")+ylab("Faith's PD") +
+  theme(legend.position = "none")+
+  scale_fill_manual(values=met.brewer("Klimt",5))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))
+ggsave("faith_elevation.png",last_plot())
 
 ## Análisis estadísticos
 
 #Parcela vs observed
+
 hist(diversidad_alfa$observed)
 shapiro.test(diversidad_alfa$observed)
 parcela_obs<-aov(data=diversidad_alfa,observed~Parcela)

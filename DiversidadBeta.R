@@ -2,16 +2,28 @@
 # PCoAs
 
 pcoa.bray <- ordinate(hongos_rare, "PCoA", "bray")
-muestra_bray <- plot_ordination(hongos_rare, pcoa.bray, color= "Tipo_muestra")
-altitud_bray<-plot_ordination(hongos_rare, pcoa.bray, color= "Altitud")
+muestra_bray <- plot_ordination(hongos_rare, pcoa.bray, color= "Tipo_muestra")+
+  theme_pubr()+
+  theme(legend.position = "right")+
+  scale_color_manual(name="Sample type",values=met.brewer("Klimt",3),labels=c("Phyllosphere","Rhizosphere","Bulk soil"))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
+  theme(legend.text = element_text(family = "Rubik",size=16))
 muestra_bray
-altitud_bray
+ggsave("bray_muestra.png",last_plot())
 
 pcoa.unifrac<-ordinate(hongos_rare,"PCoA","unifrac")
-muestra_uni<-plot_ordination(hongos_rare,pcoa.unifrac,color = "Tipo_muestra")
+muestra_uni<-plot_ordination(hongos_rare,pcoa.unifrac,color = "Tipo_muestra")+
+  theme_pubr()+
+  theme(legend.position = "right")+
+  scale_color_manual(name="Sample type",values=met.brewer("Klimt",3),labels=c("Phyllosphere","Rhizosphere","Bulk soil"))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
+  theme(legend.text = element_text(family = "Rubik",size=16))
 muestra_uni
-altitud_uni<-plot_ordination(hongos_rare, pcoa.unifrac, color= "Altitud")
-altitud_uni
+ggsave("uni_muestra.png",last_plot())
 
 #PERMANOVA
 
@@ -44,29 +56,53 @@ perma_rizos # No sé qué hacer
 pcoa.bray.filo<-ordinate(hongos_filosfera,"PCoA","bray")
 pcoa.unifrac.filo<-ordinate(hongos_filosfera,"PCoA","unifrac")
 
-bray.filo<-plot_ordination(hongos_filosfera,pcoa.bray.filo,color="Parcela")
+bray.filo<-plot_ordination(hongos_filosfera,pcoa.bray.filo,color="Altitud")+
+  theme_pubr()+
+  theme(legend.position = "right")+
+  scale_color_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
+  theme(legend.text = element_text(family = "Rubik",size=16))
 bray.filo
-unifrac.filo<-plot_ordination(hongos_filosfera,pcoa.unifrac.filo,color = "Parcela")
+ggsave("bray_filo.png",last_plot())
+
+unifrac.filo<-plot_ordination(hongos_filosfera,pcoa.unifrac.filo,color = "Altitud")+
+  theme_pubr()+
+  theme(legend.position = "right")+
+  scale_color_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
+  theme(legend.text = element_text(family = "Rubik",size=16))
 unifrac.filo
-
-# Suelo
-pcoa.bray.suelo<-ordinate(hongos_suelo,"PCoA","bray")
-pcoa.unifrac.suelo<-ordinate(hongos_suelo,"PCoA","unifrac")
-
-bray.suelo<-plot_ordination(hongos_suelo,pcoa.bray.suelo,color="Parcela")
-bray.suelo
-unifrac.suelo<-plot_ordination(hongos_suelo,pcoa.unifrac.suelo,color = "Parcela")
-unifrac.suelo
+ggsave("uni_filo.png",last_plot())
 
 # Rizosfera
 pcoa.bray.rizo<-ordinate(hongos_rizosfera,"PCoA","bray")
 pcoa.unifrac.rizo<-ordinate(hongos_rizosfera,"PCoA","unifrac")
 
-bray.rizo<-plot_ordination(hongos_rizosfera,pcoa.bray.rizo,color="Parcela")
+bray.rizo<-plot_ordination(hongos_rizosfera,pcoa.bray.rizo,color="Altitud")+
+  theme_pubr()+
+  theme(legend.position = "right")+
+  scale_color_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
+  theme(legend.text = element_text(family = "Rubik",size=16))
 bray.rizo
+ggsave("bray_rizo.png",last_plot())
 
-unifrac.rizo<-plot_ordination(hongos_rizosfera,pcoa.unifrac.rizo,color = "Parcela")
+unifrac.rizo<-plot_ordination(hongos_rizosfera,pcoa.unifrac.rizo,color = "Altitud")+
+  theme_pubr()+
+  theme(legend.position = "right")+
+  scale_color_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
+  theme(legend.text = element_text(family = "Rubik",size=16))
 unifrac.rizo
+ggsave("uni_rizo.png",last_plot())
 
 # ANOSIMs 
 
