@@ -7,6 +7,11 @@ rownames(metadatos_hongos)<-metadatos_hongos$id
 rownames(metadatos_hongos)
 metadatos_hongos$Parcela<-as.character(metadatos_hongos$Parcela)
 metadatos_hongos$Altitud<-as.character(metadatos_hongos$Altitud)
+metadatos_hongos[3,25]<-10
+colnames(metadatos_hongos)[25]<-"MO"
+metadatos_hongos[22,25]<-9
+colnames(metadatos_hongos)[35]<-"NO3"
+colnames(metadatos_hongos)[36]<-"NH4"
 sample_data(hongos)<-metadatos_hongos
 
 # Objetos individuales
@@ -27,3 +32,5 @@ hongos@tax_table[hongos@tax_table=="Fungi_phy_Incertae_sedis"]<-NA
 
 hongos_bien<-subset_samples(hongos,ID_individuo!="Control")
 hongos_bien
+
+

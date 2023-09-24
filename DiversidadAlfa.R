@@ -87,37 +87,58 @@ ggsave("faith_elevation.png",last_plot())
 
 hist(diversidad_alfa$observed)
 shapiro.test(diversidad_alfa$observed)
-parcela_obs<-aov(data=diversidad_alfa,observed~Parcela)
+parcela_obs<-aov(data=diversidad_alfa,observed~Altitud)
 summary(parcela_obs)
+TukeyHSD(parcela_obs)
+leveneTest(diversidad_alfa$observed,diversidad_alfa$Parcela)
 
 # Parcela vs faith
 
 hist(diversidad_alfa$faith_pd)
 shapiro.test(diversidad_alfa$faith_pd)
-parcela_faith<-aov(data=diversidad_alfa,faith_pd~Parcela)
+parcela_faith<-aov(data=diversidad_alfa,faith_pd~Altitud)
 summary(parcela_faith)
+TukeyHSD(parcela_faith)
+leveneTest(diversidad_alfa$faith_pd,diversidad_alfa$Parcela)
 
 # Parcela vs shannon
 
 hist(diversidad_alfa$diversity_shannon)
 shapiro.test(diversidad_alfa$diversity_shannon)
-parcela_shannon<-aov(data=diversidad_alfa,diversity_shannon~Parcela)
+parcela_shannon<-aov(data=diversidad_alfa,diversity_shannon~Altitud)
 summary(parcela_shannon)
+TukeyHSD(parcela_shannon)
+leveneTest(diversidad_alfa$diversity_shannon,diversidad_alfa$Parcela)
 
 # Tipo de muestra vs observed
 
 muestra_obs<-aov(data=diversidad_alfa,observed~Tipo_muestra)
 summary(muestra_obs)
-
+TukeyHSD(muestra_obs)
+leveneTest(diversidad_alfa$observed,diversidad_alfa$Tipo_muestra)
 # Tipo de muestra vs faith
 
 muestra_faith<-aov(data=diversidad_alfa,faith_pd~Tipo_muestra)
 summary(muestra_faith)
-
+TukeyHSD(muestra_faith)
+leveneTest(diversidad_alfa$faith_pd,diversidad_alfa$Tipo_muestra)
 
 # Tipo de muestra vs shannon
+
 muestra_shannon<-aov(data=diversidad_alfa,diversity_shannon~Tipo_muestra)
 summary(muestra_shannon)
+TukeyHSD(muestra_shannon)
+leveneTest(diversidad_alfa$diversity_shannon,diversidad_alfa$Tipo_muestra)
 
+modelos<-c("Richness ~ Elevation","Shannon ~ Elevation","Faith's PD ~ Elevation","Richness ~ Sample type","Shannon ~ Sample type","Faith's PD ~ Sample type")
+valor_F<-c(2.23,1.603,1.176,1.5,4.611,0.671)
+valor_P<-c(0.0902,0.2,0.342,0.239,0.0177,0.518)
 
+tabla_anova<-data.frame(modelos,valor_F,valor_P)
+colnames(tabla_anova)<-c("Model","F","p-value")
 
+tabla_anova<-tabla_anova %>%
+  gt()%>%
+  gtExtras::gt_theme_pff()
+gtsave(tabla_anova,"tabla_anova.png")
+tabla_anova

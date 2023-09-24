@@ -22,6 +22,8 @@ library(gtable)
 library(gtExtras)
 library(patchwork)
 library(qiime2R)
+library(gtsummary)
+library(ggfortify)
 
 font_add_google("Rubik","Rubik")
 font.families()

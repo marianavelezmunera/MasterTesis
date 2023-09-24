@@ -31,7 +31,7 @@ ggsave("uni_muestra.png",last_plot())
 
 perma_muestra<-adonis2(t(hongos_rare@otu_table)~Tipo_muestra,data=metadatos_hongos[1:34,],method = "bray")
 perma_muestra
-perma_parce<-adonis2(t(hongos_rare@otu_table)~Parcela,data = metadatos_hongos[1:34,],method = "bray")
+perma_parce<-adonis2(t(hongos_rare@otu_table)~Altitud,data = metadatos_hongos[1:34,],method = "bray")
 perma_parce
 
 # Desagreguemos por muestra para la de las parcelas
@@ -40,14 +40,14 @@ hongos_filosfera<-subset_samples(hongos_rare,Tipo_muestra=="Filosfera")
 hongos_suelo<-subset_samples(hongos_rare,Tipo_muestra=="Suelo")
 hongos_rizosfera<-subset_samples(hongos_rare,Tipo_muestra=="Rizosfera")
 
-perma_filo<-adonis2(t(hongos_filosfera@otu_table)~Parcela,data = subset(metadatos_hongos,Tipo_muestra=="Filosfera"),method = "bray",permutations = 999)
+perma_filo<-adonis2(t(hongos_filosfera@otu_table)~Altitud,data = subset(metadatos_hongos,Tipo_muestra=="Filosfera"),method = "bray",permutations = 999)
 
 perma_filo
 
-perma_suelo<-adonis2(t(hongos_suelo@otu_table)~Parcela,data = subset(metadatos_hongos,Tipo_muestra=="Suelo"),method = "bray",permutations = 999)
+perma_suelo<-adonis2(t(hongos_suelo@otu_table)~Altitud,data = subset(metadatos_hongos,Tipo_muestra=="Suelo"),method = "bray",permutations = 999)
 perma_suelo
 
-perma_rizos<-adonis2(t(hongos_rizosfera@otu_table)~Parcela,data = subset(metadatos_hongos,Tipo_muestra=="Rizosfera"),method = "bray",permutations = 999)
+perma_rizos<-adonis2(t(hongos_rizosfera@otu_table)~Altitud,data = subset(metadatos_hongos,Tipo_muestra=="Rizosfera"),method = "bray",permutations = 999)
 perma_rizos # No sé qué hacer
 
 # Ordenacion de cada tipo de muestra
@@ -109,9 +109,34 @@ ggsave("uni_rizo.png",last_plot())
 ANOSIM_muestra<-anosim(t(hongos_rare@otu_table), metadatos_hongos[1:34,]$Tipo_muestra, distance="bray",permutations=9999)
 ANOSIM_muestra
 
-ANOSIM_filo<-anosim(t(hongos_filosfera@otu_table),subset(metadatos_hongos,Tipo_muestra=="Filosfera")$Parcela,distance = "bray",permutations = 9999)
+ANOSIM_elevacion<-anosim(t(hongos_rare@otu_table),metadatos_hongos[1:34,]$Altitud,distance = "bray",permutations = 9999)
+ANOSIM_elevacion
+
+ANOSIM_filo<-anosim(t(hongos_filosfera@otu_table),subset(metadatos_hongos,Tipo_muestra=="Filosfera")$Altitud,distance = "bray",permutations = 9999)
 ANOSIM_filo
 
-ANOSIM_rizo<-anosim(t(hongos_rizosfera@otu_table),subset(metadatos_hongos,Tipo_muestra=="Rizosfera")$Parcela,distance = "bray",permutations = 9999)
+ANOSIM_rizo<-anosim(t(hongos_rizosfera@otu_table),subset(metadatos_hongos,Tipo_muestra=="Rizosfera")$Altitud,distance = "bray",permutations = 9999)
 ANOSIM_rizo
 
+# Tabla permanova
+
+modelo_perma<-c("All ~ Sample type","All ~ Elevation","Phyllosphere ~ Elevation","Rhizosphere ~ Elevation")
+p_perma<-c(0.001,0.085,0.001,0.001)
+f_perma<-c(2.2413,1.1736,1.4538,2.4178)
+tabla_perma<-data.frame(modelo_perma,f_perma,p_perma)%>%
+  gt()%>%
+  cols_label(modelo_perma="Model",f_perma="Pseudo-F",p_perma="p-value")%>%
+  gt_theme_pff()
+tabla_perma
+gtsave(tabla_perma,"tabla_permanova.png")
+
+#Tabla ANCOM
+
+R_ancom<-c(0.4212,0.1378,0.6193,0.9428)
+p_ancom<-c("<0.001","0.0334","<0.001","<0.001")
+tabla_ANCOM<-data.frame(modelo_perma,R_ancom,p_ancom)%>%
+  gt()%>%
+  cols_label(modelo_perma="Model",R_ancom="R",p_ancom="p-value")%>%
+  gt_theme_pff()
+tabla_ANCOM
+gtsave(tabla_ANCOM,"tabla_ANCOM.png")
