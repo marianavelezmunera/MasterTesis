@@ -140,3 +140,11 @@ tabla_ANCOM<-data.frame(modelo_perma,R_ancom,p_ancom)%>%
   gt_theme_pff()
 tabla_ANCOM
 gtsave(tabla_ANCOM,"tabla_ANCOM.png")
+
+ANCOM<-ancom(hongos_rare,assay_name="counts",tax_level="Phylum",main_var = "Altitud",adj_formula = "Tipo_muestra")
+
+ANCOM_order<-ancom(hongos_rare,assay_name="counts",tax_level="Order",main_var = "Altitud",adj_formula = "Tipo_muestra")
+
+ANCOM_family<-ancom(hongos_rare,assay_name="counts",tax_level="Family",main_var = "Altitud",adj_formula = "Tipo_muestra")
+
+ANCOM

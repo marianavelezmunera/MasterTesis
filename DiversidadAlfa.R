@@ -142,3 +142,26 @@ tabla_anova<-tabla_anova %>%
   gtExtras::gt_theme_pff()
 gtsave(tabla_anova,"tabla_anova.png")
 tabla_anova
+
+ggplot(data = diversidad_alfa,aes(x=Tipo_muestra,y=faith_pd,fill=Parcela))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Sample type")+ylab("Faith's PD")+
+  theme(legend.position = "none")+
+  scale_fill_manual(values=met.brewer("Klimt",5))+
+  scale_x_discrete(labels=c("Phyllosphere","Rhizosphere","Bulk soil"))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))
+ggsave("faith_sample.png",last_plot())
+
+unique(diversidad_alfa$Parcela)
+
+ggplot(data = diversidad_alfa,aes(x=Altitud,y=diversity_shannon,fill=Tipo_muestra))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Elevation")+ylab("Shannon")+
+  theme(legend.position = "right")+
+  scale_fill_manual(name="Sample type", label=c("Phyllosphere","Rhizosphere","Bulk soil"),values=met.brewer("Klimt",3))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))
+ggsave("boxplot_todo.png",last_plot())
