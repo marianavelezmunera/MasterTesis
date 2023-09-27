@@ -132,19 +132,13 @@ gtsave(tabla_perma,"tabla_permanova.png")
 
 #Tabla ANCOM
 
-R_ancom<-c(0.4212,0.1378,0.6193,0.9428)
-p_ancom<-c("<0.001","0.0334","<0.001","<0.001")
-tabla_ANCOM<-data.frame(modelo_perma,R_ancom,p_ancom)%>%
+R_anosim<-c(0.4212,0.1378,0.6193,0.9428)
+p_anosim<-c("<0.001","0.0334","<0.001","<0.001")
+tabla_ANOSIM<-data.frame(modelo_perma,R_anosim,p_anosim)%>%
   gt()%>%
-  cols_label(modelo_perma="Model",R_ancom="R",p_ancom="p-value")%>%
+  cols_label(modelo_perma="Model",R_anosim="R",p_anosim="p-value")%>%
   gt_theme_pff()
-tabla_ANCOM
-gtsave(tabla_ANCOM,"tabla_ANCOM.png")
+tabla_ANOSIM
+gtsave(tabla_ANOSIM,"tabla_ANOSIM.png")
 
-ANCOM<-ancom(hongos_rare,assay_name="counts",tax_level="Phylum",main_var = "Altitud",adj_formula = "Tipo_muestra")
 
-ANCOM_order<-ancom(hongos_rare,assay_name="counts",tax_level="Order",main_var = "Altitud",adj_formula = "Tipo_muestra")
-
-ANCOM_family<-ancom(hongos_rare,assay_name="counts",tax_level="Family",main_var = "Altitud",adj_formula = "Tipo_muestra")
-
-ANCOM
