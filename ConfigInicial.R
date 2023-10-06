@@ -25,7 +25,7 @@ library(qiime2R)
 library(gtsummary)
 library(ggfortify)
 library(ANCOMBC)
-
+library(DESeq2)
 font_add_google("Rubik","Rubik")
 font.families()
 showtext_auto()

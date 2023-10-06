@@ -1,9 +1,9 @@
 #ANCOMs
-ANCOM_filo<-ancom(hongos_rare,assay_name="counts",tax_level="Phylum",main_var = "Altitud",adj_formula = "Tipo_muestra")
+ANCOM_filo<-ancombc2(hongos_rare,assay_name="counts",tax_level="Phylum",fix_formula = "Altitud",rand_formula = "Tipo_muestra",pseudo = 1,group = "Altitud",alpha = 0.05)
 
-ANCOM_order<-ancom(hongos_rare,assay_name="counts",tax_level="Order",main_var = "Altitud",adj_formula = "Tipo_muestra")
+ANCOM_order<-ancombc2(hongos_rare,assay_name="counts",tax_level="Order",fix_formula = "Altitud",rand_formula = "Tipo_muestra",pseudo = 1,group = "Altitud",alpha = 0.05)
 
-ANCOM_family<-ancom(hongos_rare,assay_name="counts",tax_level="Family",main_var = "Altitud",adj_formula = "Tipo_muestra")
+ANCOM_family<-ancombc2(hongos_rare,assay_name="counts",tax_level="Family",fix_formula = "Altitud",rand_formula = "Tipo_muestra",pseudo = 1,group = "Altitud",alpha = 0.01)
 
 View(ANCOM_filo$res)
 View(ANCOM_filo$beta_data)
