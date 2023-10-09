@@ -5,7 +5,7 @@ ANCOM_order<-ancombc2(hongos_rare,assay_name="counts",tax_level="Order",fix_form
 
 ANCOM_family<-ancombc2(hongos_rare,assay_name="counts",tax_level="Family",fix_formula = "Altitud",rand_formula = "Tipo_muestra",pseudo = 1,group = "Altitud",alpha = 0.01)
 
-View(ANCOM_filo$res)
+View(ANCOM_filo_family$res)
 View(ANCOM_filo$beta_data)
 View(ANCOM_filo$p_data)
 View(ANCOM_family$res)
@@ -15,7 +15,23 @@ View(ANCOM_order$res)
 
 ANCOM_filo_total<-ancombc2(hongos_filosfera,assay_name="counts",tax_level="Phylum",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
 ANCOM_filo_order<-ancombc2(hongos_filosfera,assay_name="counts",tax_level="Order",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
-ANCOM_filo_family<-ancombc2(hongos_filosfera,assay_name="counts",tax_level="Order",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
+ANCOM_filo_family<-ancombc2(hongos_filosfera,assay_name="counts",tax_level="Family",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
+
+# Plot
+ANCOM_subset_filo<-ANCOM_filo_family$res
+ANCOM_subset_filo<-subset(ANCOM_subset_filo,diff_Altitud2007!="FALSE"| diff_Altitud2018!="FALSE"|diff_Altitud2178!="FALSE"|diff_Altitud2210!="FALSE"|`diff_(Intercept)`!="FALSE")
+
+ANCOM_subset_filo<-ANCOM_subset_filo[,1:6]
+ANCOM_subset_filo<-gather(ANCOM_subset_filo,`lfc_(Intercept)`,lfc_Altitud2007,lfc_Altitud2018,lfc_Altitud2178,lfc_Altitud2210,key="Elevation",value="LFC")
+
+ggplot(data=ANCOM_subset_filo,aes(x=taxon,y=LFC,fill=taxon))+
+  geom_col()+
+  facet_wrap(~Elevation,labeller = labeller(Elevation=c(`lfc_(Intercept)`="1978","lfc_Altitud2007"="2007","lfc_Altitud2018" = "2018","lfc_Altitud2178"="2178","lfc_Altitud2210"="2210")
+))+
+  theme_pubclean()+
+  theme(legend.position = "none")+
+  scale_x_discrete(label=c("Cerrenaceae","Cryptococcaceae","Microsporomyceteaceae","Ploettnerulaceae","Mycosphaerellales"))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust=0.5))
 
 
 # ANCOMs rizosfera

@@ -1,4 +1,5 @@
 #DESeq2
+
 # Todo
 hongos_DESeq<-phyloseq_to_deseq2(hongos_rare, ~ Altitud+Tipo_muestra)
 
@@ -7,6 +8,7 @@ diagdds= DESeq(hongos_DESeq, fitType="local",sfType = "poscounts")
 resultados_DESeq<-results(diagdds,cooksCutoff = FALSE)
 sig_table<-resultados_DESeq[which(resultados_DESeq$padj<0.05),]
 sig_table<-cbind(as(sig_table,"data.frame"),as(tax_table(hongos_rare)[rownames(sig_table), ], "matrix"))
+
 #Filosfera
 
 filo_DESeq<-phyloseq_to_deseq2(hongos_filosfera, ~ Altitud)
