@@ -93,4 +93,39 @@ ggplot(sig_table_rizo, aes(x=Family, y=log2FoldChange, color=Class)) + geom_poin
 
 ggsave("DESeq_rizo.png",last_plot())
 
+## Heatmap
+
+sig_table1<-sig_table[order(sig_table$padj,na.last = NA),]
+sig_table1<-sig_table1[1:20,]
+taxa_sig<-rownames(sig_table1)
+ps.taxa.rel <- transform_sample_counts(hongos_rare, function(x) x/sum(x)*100)
+ps.taxa.rel.sig <- prune_taxa(taxa_sig, ps.taxa.rel)
+matrix <- as.matrix(data.frame(otu_table(ps.taxa.rel.sig)))
+rownames(matrix) <- as.character(tax_table(ps.taxa.rel.sig)[, "Species"])
+metadata_sub <- data.frame(sample_data(ps.taxa.rel.sig))
+
+annotation_col = data.frame(
+  Elevation = as.factor(metadata_sub$Altitud), 
+  `Sample type` = as.factor(metadata_sub$Tipo_muestra), 
+  check.names = FALSE
+)
+rownames(annotation_col) = rownames(metadata_sub)
+annotation_row = data.frame(
+  Phylum = as.factor(tax_table(ps.taxa.rel.sig)[, "Phylum"])
+)
+phylum_col = RColorBrewer::brewer.pal(length(levels(annotation_row$Phylum)), "Paired")
+names(phylum_col) = levels(annotation_row$Phylum)
+ann_colors = list(
+  Elevation = c("1978"=colores[1],"2007"=colores[2],"2018"=colores[3],"2178"=colores[4],"2210"=colores[5]),
+  `Sample type` = c(Filosfera = colores2[1], Rizosfera = colores2[2],Suelo=colores2[3])
+)
+
+colores<-moma.colors("Flash",5)
+colores2<-moma.colors("Picabia",3)
+pheatmap(matrix, scale= "row", 
+         annotation_col = annotation_col,
+         annotation_colors = ann_colors,
+         color = moma.colors("Kippenberger",type="continuous"),
+         cellwidth = 10,
+         filename = "DESeq2_heatmap.png")
 
