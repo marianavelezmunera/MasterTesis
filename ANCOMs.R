@@ -10,3 +10,17 @@ View(ANCOM_filo$beta_data)
 View(ANCOM_filo$p_data)
 View(ANCOM_family$res)
 View(ANCOM_order$res)
+
+# ANCOMs filosfera
+
+ANCOM_filo_total<-ancombc2(hongos_filosfera,assay_name="counts",tax_level="Phylum",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
+ANCOM_filo_order<-ancombc2(hongos_filosfera,assay_name="counts",tax_level="Order",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
+ANCOM_filo_family<-ancombc2(hongos_filosfera,assay_name="counts",tax_level="Order",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
+
+
+# ANCOMs rizosfera
+
+ANCOM_rizo_total<-ancombc2(hongos_rizosfera,assay_name="counts",tax_level="Phylum",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
+ANCOM_rizo_order<-ancombc2(hongos_rizosfera,assay_name="counts",tax_level="Order",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
+ANCOM_rizo_family<-ancombc2(hongos_rizosfera,assay_name="counts",tax_level="Order",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
+
