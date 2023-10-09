@@ -34,12 +34,19 @@ x = tapply(sig_table_filo$log2FoldChange, sig_table_filo$Family, function(x) max
 x = sort(x, TRUE)
 sig_table_filo$Family = factor(as.character(sig_table_filo$Family), levels=names(x))
 
-ggplot(sig_table_filo, aes(x=Family, y=log2FoldChange, color=Class)) + geom_point(size=6) + 
+ggplot(sig_table_filo, aes(x=Family, y=log2FoldChange, color=Class)) + geom_point(size=2) + 
   theme_pubclean()+
-  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust=0.5))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust=0.5))+
   scale_color_manual(values=moma.colors("Warhol",11))+
-  theme(legend.position = "right")
-
+  theme(legend.position = "right")+
+  ylab("LFC")+
+  theme(axis.title = element_text(family="Rubik",face="bold",size=20))+
+  theme(axis.text = element_text(family="Rubik",size = 12))+
+  theme(legend.text = element_text(family="Rubik"))+
+  theme(legend.title = element_text(family="Rubik",face="bold",size=16))+
+  theme(legend.key.size = unit(0.5,"cm"))
+  
+ggsave("DESeq_filo.png",last_plot())
 
 #Solo rizosfera
 
@@ -72,10 +79,18 @@ x = tapply(sig_table_rizo$log2FoldChange, sig_table_rizo$Family, function(x) max
 x = sort(x, TRUE)
 sig_table_rizo$Family = factor(as.character(sig_table_rizo$Family), levels=names(x))
 
-ggplot(sig_table_rizo, aes(x=Family, y=log2FoldChange, color=Class)) + geom_point(size=6) + 
+ggplot(sig_table_rizo, aes(x=Family, y=log2FoldChange, color=Class)) + geom_point(size=2) + 
   theme_pubclean()+
-  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust=0.5))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust=0.5))+
   scale_color_manual(values=moma.colors("Warhol",10))+
-  theme(legend.position = "right")
+  theme(legend.position = "right")+
+  ylab("LFC")+
+  theme(axis.title = element_text(family="Rubik",face="bold",size=20))+
+  theme(axis.text = element_text(family="Rubik",size = 12))+
+  theme(legend.text = element_text(family="Rubik"))+
+  theme(legend.title = element_text(family="Rubik",face="bold",size=16))+
+  theme(legend.key.size = unit(0.5,"cm"))
+
+ggsave("DESeq_rizo.png",last_plot())
 
 
