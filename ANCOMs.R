@@ -31,7 +31,8 @@ ggplot(data=ANCOM_subset_filo,aes(x=taxon,y=LFC,fill=taxon))+
   theme_pubclean()+
   theme(legend.position = "none")+
   scale_x_discrete(label=c("Cerrenaceae","Cryptococcaceae","Microsporomyceteaceae","Ploettnerulaceae","Mycosphaerellales"))+
-  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust=0.5))
+  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust=0.5))+
+  scale_fill_manual(values=moma.colors("Warhol",5))
 
 
 # ANCOMs rizosfera
@@ -40,3 +41,9 @@ ANCOM_rizo_total<-ancombc2(hongos_rizosfera,assay_name="counts",tax_level="Phylu
 ANCOM_rizo_order<-ancombc2(hongos_rizosfera,assay_name="counts",tax_level="Order",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
 ANCOM_rizo_family<-ancombc2(hongos_rizosfera,assay_name="counts",tax_level="Order",pseudo = 1,fix_formula="Altitud",group = "Altitud",alpha = 0.05)
 
+
+ANCOM_subset_rizo<-ANCOM_rizo_family$res
+ANCOM_subset_rizo<-subset(ANCOM_subset_rizo,diff_Altitud2007!="FALSE"| diff_Altitud2018!="FALSE"|diff_Altitud2178!="FALSE"|diff_Altitud2210!="FALSE"|`diff_(Intercept)`!="FALSE")
+
+ANCOM_subset_rizo<-ANCOM_subset_rizo[,1:6]
+ANCOM_subset_rizo<-gather(ANCOM_subset_rizo,`lfc_(Intercept)`,lfc_Altitud2007,lfc_Altitud2018,lfc_Altitud2178,lfc_Altitud2210,key="Elevation",value="LFC")
