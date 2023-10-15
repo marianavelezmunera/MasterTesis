@@ -14,16 +14,17 @@ muestra_bray
 ggsave("bray_muestra.png",last_plot())
 
 pcoa.unifrac<-ordinate(hongos_rare,"PCoA","unifrac")
-muestra_uni<-plot_ordination(hongos_rare,pcoa.unifrac,color = "Tipo_muestra")+
+muestra_uni<-plot_ordination(hongos_rare,pcoa.unifrac,shape = "Tipo_muestra",color="Altitud")+
   theme_pubr()+
   theme(legend.position = "right")+
-  scale_color_manual(name="Sample type",values=met.brewer("Klimt",3),labels=c("Phyllosphere","Rhizosphere","Bulk soil"))+
   theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
   theme(axis.text = element_text(family = "Rubik",size=16))+
   theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
-  theme(legend.text = element_text(family = "Rubik",size=16))
+  theme(legend.text = element_text(family = "Rubik",size=16))+
+  scale_color_manual(name="Elevación",values=moma.colors("Warhol",5))+
+  scale_shape(name="Tipo de muestra",labels=c("Filósfera","Rizósfera","Suelo"))
 muestra_uni
-ggsave("uni_muestra.png",last_plot())
+ggsave("uni_muestra_total.png",last_plot())
 
 #PERMANOVA
 

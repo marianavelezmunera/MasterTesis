@@ -2,7 +2,8 @@
 
 # Nivel: Filo
 # Con los NA
-barras_filo_datos<-transform(aggregate_top_taxa2(hongos_filosfera,"Phylum",top=10),"compositional")
+barras_filo_datos<-microbiome::transform(aggregate_top_taxa2(hongos_filosfera,"Phylum",top=10),"compositional")
+
 barras_filo<-plot_composition(barras_filo_datos)+
   theme_pubclean()+
   theme(legend.position = "right")+
@@ -162,3 +163,19 @@ rizo_NA_orden<-plot_composition(orden_rizo_NA)+
   theme(legend.key.size = unit(0.5,"cm"))
 rizo_NA_orden
 ggsave("rizo_na_orden.png",last_plot())
+
+total_NA<-microbiome::transform(aggregate_top_taxa2(subset_taxa(hongos_rare,!is.na(Order)),"Order",top=10),"compositional")
+NA_barras<-plot_composition(total_NA,group_by = "Tipo_muestra")+
+  theme_pubclean()+
+  theme(legend.position = "right")+
+  scale_fill_manual(name="Orden",values=moma.colors("Warhol",11))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=12,angle = 90))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=18))+
+  theme(legend.text = element_text(family = "Rubik",size=14))+
+  theme(legend.key.size = unit(0.5,"cm"))+
+  ylab("Abundancia")+
+  xlab("Tipo de muestra")
+ggsave("barras_todo.png",last_plot())
+NA_barras
+

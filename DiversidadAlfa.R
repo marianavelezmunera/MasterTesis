@@ -159,9 +159,14 @@ unique(diversidad_alfa$Parcela)
 ggplot(data = diversidad_alfa,aes(x=Altitud,y=diversity_shannon,fill=Tipo_muestra))+
   geom_boxplot(color="black")+
   theme_pubclean()+
-  xlab("Elevation")+ylab("Shannon")+
+  xlab("Elevación")+ylab("Índice de Shannon")+
   theme(legend.position = "right")+
-  scale_fill_manual(name="Sample type", label=c("Phyllosphere","Rhizosphere","Bulk soil"),values=met.brewer("Klimt",3))+
-  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
-  theme(axis.text = element_text(family = "Rubik",size=16))
+  scale_fill_manual(name="Tipo de muestra", label=c("Filósfera","Rizósfera","Suelo"),values=moma.colors("Warhol",3))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=32))+
+  theme(axis.text = element_text(family = "Rubik",size=24))+
+  theme(legend.title = element_text(family = "Rubik",face = "bold",size = 24))+
+  theme(legend.text = element_text(family = "Rubik",size = 16))
+
 ggsave("boxplot_todo.png",last_plot())
+
+
