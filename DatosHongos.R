@@ -1,7 +1,11 @@
 # Objeto phyloseq 
 
 hongos<-qza_to_phyloseq(features = "TablaDADA2HongosForward.qza",tree="ArbolRooted.qza",taxonomy = "TaxonomiaHongos.qza")
-
+library(readr)
+metadatos_hongos <- read_delim("metadatos_hongos.txt", 
+                               delim = "\t", escape_double = FALSE, 
+                               trim_ws = TRUE)
+View(metadatos_hongos)
 metadatos_hongos<-as.data.frame(metadatos_hongos)
 rownames(metadatos_hongos)<-metadatos_hongos$id
 rownames(metadatos_hongos)
@@ -33,4 +37,9 @@ hongos@tax_table[hongos@tax_table=="Fungi_phy_Incertae_sedis"]<-NA
 hongos_bien<-subset_samples(hongos,ID_individuo!="Control")
 hongos_bien
 
+# Objetos por tipo de muestra
+
+hongos_filosfera<-subset_samples(hongos_rare,Tipo_muestra=="Filosfera")
+hongos_suelo<-subset_samples(hongos_rare,Tipo_muestra=="Suelo")
+hongos_rizosfera<-subset_samples(hongos_rare,Tipo_muestra=="Rizosfera")
 

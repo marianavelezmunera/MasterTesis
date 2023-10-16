@@ -35,18 +35,14 @@ perma_muestra
 perma_parce<-adonis2(t(hongos_rare@otu_table)~Altitud,data = metadatos_hongos[1:34,],method = "bray")
 perma_parce
 
+perma_total<-adonis2(t(hongos_rare@otu_table)~Tipo_muestra+Altitud,data = metadatos_hongos[1:34,],method = "bray")
+perma_total
 # Desagreguemos por muestra para la de las parcelas
 
-hongos_filosfera<-subset_samples(hongos_rare,Tipo_muestra=="Filosfera")
-hongos_suelo<-subset_samples(hongos_rare,Tipo_muestra=="Suelo")
-hongos_rizosfera<-subset_samples(hongos_rare,Tipo_muestra=="Rizosfera")
 
 perma_filo<-adonis2(t(hongos_filosfera@otu_table)~Altitud,data = subset(metadatos_hongos,Tipo_muestra=="Filosfera"),method = "bray",permutations = 999)
 
 perma_filo
-
-perma_suelo<-adonis2(t(hongos_suelo@otu_table)~Altitud,data = subset(metadatos_hongos,Tipo_muestra=="Suelo"),method = "bray",permutations = 999)
-perma_suelo
 
 perma_rizos<-adonis2(t(hongos_rizosfera@otu_table)~Altitud,data = subset(metadatos_hongos,Tipo_muestra=="Rizosfera"),method = "bray",permutations = 999)
 perma_rizos # No sé qué hacer
@@ -121,7 +117,7 @@ ANOSIM_rizo
 
 # Tabla permanova
 
-modelo_perma<-c("All ~ Sample type","All ~ Elevation","Phyllosphere ~ Elevation","Rhizosphere ~ Elevation")
+modelo_perma<-c("Tipo de muestra", "Elevacion","Phyllosphere ~ Elevation","Rhizosphere ~ Elevation")
 p_perma<-c(0.001,0.085,0.001,0.001)
 f_perma<-c(2.2413,1.1736,1.4538,2.4178)
 tabla_perma<-data.frame(modelo_perma,f_perma,p_perma)%>%
@@ -131,15 +127,79 @@ tabla_perma<-data.frame(modelo_perma,f_perma,p_perma)%>%
 tabla_perma
 gtsave(tabla_perma,"tabla_permanova.png")
 
-#Tabla ANCOM
+#Tabla ANOSIM
 
 R_anosim<-c(0.4212,0.1378,0.6193,0.9428)
 p_anosim<-c("<0.001","0.0334","<0.001","<0.001")
 tabla_ANOSIM<-data.frame(modelo_perma,R_anosim,p_anosim)%>%
   gt()%>%
-  cols_label(modelo_perma="Model",R_anosim="R",p_anosim="p-value")%>%
-  gt_theme_pff()
+  cols_label(modelo_perma="Model",R_anosim="R",p_anosim="p-value")
 tabla_ANOSIM
 gtsave(tabla_ANOSIM,"tabla_ANOSIM.png")
+rownames(perma_total)<-c("Tipo de muestra","Elevación","Residual","Total")
 
+tabla_perma_completa<-perma_total[1:2,-3]%>%
+  gt(rownames_to_stub = TRUE)%>%
+  tab_options(table.font.size = px(20)) |>
+  opt_table_font(
+    font = list(
+      google_font(name = "Rubik")))
+
+tabla_perma_completa<-sub_missing(tabla_perma_completa,missing_text = "-")
+tabla_perma_completa
+
+tabla_perma_completa<-tabla_perma_completa%>%
+  tab_options(column_labels.font.weight = 'bold',
+              stub.font.weight = "bold")
+
+tabla_perma_completa<-tabla_perma_completa%>%
+  tab_options(column_labels.border.top.color = "black",
+              column_labels.border.bottom.color = "black",
+              column_labels.border.lr.color = "black")
+
+tabla_perma_completa<-tabla_perma_completa%>%
+  tab_style(
+    locations = cells_column_labels(columns = everything()),
+    style     = list(
+      #Give a thick border below
+      cell_borders(sides = "all", weight = px(2),color="black")))%>%
+  tab_style(locations = cells_stubhead(),
+            style=cell_borders(sides=c("left","top"),color="transparent",weight = px(2)))%>%
+  tab_style(locations = cells_stubhead(),
+            style = cell_borders(sides="right",color="transparent"))
+tabla_perma_completa
+
+tabla_perma_completa<-tabla_perma_completa%>%
+  tab_style(
+  style = cell_borders(
+    sides = "all",
+    weight = px(2),color="black"
+  ),
+  locations = cells_body()
+)
+
+tabla_perma_completa<-tabla_perma_completa%>%
+  tab_style(
+    style = cell_borders(sides="all",color="black",weight = px(2)),
+    locations = cells_stub()
+  )
+
+tabla_perma_completa<-tabla_perma_completa%>%
+  tab_style(
+    locations = cells_column_labels(columns = everything()),
+    style = list(cell_text(color="black"),cell_fill(color=moma.colors("Warhol",10)[2])))%>%
+  tab_style(style = list(cell_text(color="black"),cell_fill(color=moma.colors("Warhol",10)[2])),
+            locations = cells_stub())
+tabla_perma_completa
+
+tabla_perma_completa<-tabla_perma_completa%>%
+  tab_source_note(
+    source_note = "Tabla 2. Resultados del PERMANOVA"
+  )%>%
+  tab_style(locations = cells_source_notes(),
+            style = cell_borders("all",color="white"))%>%
+  opt_table_lines(extent = "none")
+gtsave(tabla_perma_completa,"tabla_perma_completa.png")
+
+pagedown::chrome_print("Poster/Poster.Rmd")
 

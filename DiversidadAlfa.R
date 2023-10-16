@@ -170,3 +170,6 @@ ggplot(data = diversidad_alfa,aes(x=Altitud,y=diversity_shannon,fill=Tipo_muestr
 ggsave("boxplot_todo.png",last_plot())
 
 
+anova_completo<-aov(diversity_shannon~Tipo_muestra+Parcela,data = diversidad_alfa)
+summary(anova_completo)
+
