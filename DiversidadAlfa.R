@@ -173,3 +173,61 @@ ggsave("boxplot_todo.png",last_plot())
 anova_completo<-aov(diversity_shannon~Tipo_muestra+Parcela,data = diversidad_alfa)
 summary(anova_completo)
 
+anova_datos<-data.frame(Df=c(2,4,27),Sum_sq=c(2.16,1.79,5.47),F_val=c(5.33,2.21,NA),p=c(0.001,0.09,NA))
+colnames(anova_datos)<-c("Df","SumOfSqs","F","Pr(>F)")
+rownames(anova_datos)<-c("Tipo de muestra","Elevación","")
+anova_datos<-anova_datos[-3,]
+
+tabla_anova_completa<-anova_datos%>%
+  gt(rownames_to_stub = TRUE)%>%
+  tab_options(table.font.size = px(20)) |>
+  opt_table_font(
+    font = list(
+      google_font(name = "Rubik")))
+
+tabla_anova_completa<-sub_missing(tabla_anova_completa,missing_text = "-")%>%
+  tab_options(column_labels.font.weight = 'bold',
+              stub.font.weight = "bold",
+              column_labels.border.top.color = "black",
+              column_labels.border.bottom.color = "black",
+              column_labels.border.lr.color = "black")%>%
+  tab_style(
+    locations = cells_column_labels(columns = everything()),
+    style     = list(cell_borders(sides = "all", weight = px(2),color="black")))
+
+tabla_anova_completa<-tabla_anova_completa%>%
+  tab_style(locations = cells_stubhead(),
+            style=cell_borders(sides=c("left","top"),color="transparent",weight = px(2)))%>%
+  tab_style(locations = cells_stubhead(),
+            style = cell_borders(sides="right",color="transparent"))%>%
+  tab_style(
+    style = cell_borders(
+      sides = "all",
+      weight = px(2),color="black"
+    ),
+    locations = cells_body()
+  )
+
+tabla_anova_completa<-tabla_anova_completa%>%
+  tab_style(
+    locations = cells_column_labels(columns = everything()),
+    style = list(cell_text(color="black"),cell_fill(color=moma.colors("Warhol",10)[1])))%>%
+  tab_style(style = list(cell_text(color="black"),cell_fill(color=moma.colors("Warhol",10)[1])),
+            locations = cells_stub())
+tabla_anova_completa
+
+tabla_anova_completa<-tabla_anova_completa%>%
+  tab_source_note(
+    source_note = "Tabla 1. Resultados del ANOVA"
+  )%>%
+  tab_style(locations = cells_source_notes(),
+            style = cell_borders("all",color="white"))%>%
+  opt_table_lines(extent = "none")
+tabla_anova_completa
+
+tabla_anova_completa<-tabla_anova_completa%>%
+  tab_style(style=cell_borders("all",color="black",weight = px(2)),
+            locations = cells_stub())
+gtsave(tabla_anova_completa,"tabla_anova_completa.png")
+
+
