@@ -74,3 +74,6 @@ ggplot(data=ANCOM_subset_rizo,aes(x=taxon,y=LFC,fill=taxon))+
 ggsave("ANCOM_rizo.png",last_plot())
 
 ancom_genero<-ancombc2(hongos_rare,assay_name="counts",tax_level="Genus",fix_formula = "Altitud",rand_formula = "Tipo_muestra",pseudo = 1,group = "Altitud",alpha = 0.05)
+
+
+

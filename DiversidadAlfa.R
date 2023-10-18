@@ -230,4 +230,5 @@ tabla_anova_completa<-tabla_anova_completa%>%
             locations = cells_stub())
 gtsave(tabla_anova_completa,"tabla_anova_completa.png")
 
+pagedown::chrome_print("Poster/Poster.Rmd")
 
