@@ -5,11 +5,14 @@ ANCOM_order<-ancombc2(hongos_rare,assay_name="counts",tax_level="Order",fix_form
 
 ANCOM_family<-ancombc2(hongos_rare,assay_name="counts",tax_level="Family",fix_formula = "Altitud",rand_formula = "Tipo_muestra",pseudo = 1,group = "Altitud",alpha = 0.01)
 
+ANCOM_genero<-ancombc2(hongos_rare,assay_name="counts",tax_level="Genus",fix_formula = "Altitud",rand_formula = "Tipo_muestra",pseudo = 1,group = "Altitud",alpha = 0.05)
+
 View(ANCOM_filo_family$res)
 View(ANCOM_filo$beta_data)
 View(ANCOM_filo$p_data)
 View(ANCOM_family$res)
 View(ANCOM_order$res)
+View(ANCOM_genero$res)
 
 # ANCOMs filosfera
 
@@ -70,3 +73,4 @@ ggplot(data=ANCOM_subset_rizo,aes(x=taxon,y=LFC,fill=taxon))+
   theme(strip.text = element_text(face = "bold",family = "Rubik",size = 20))
 ggsave("ANCOM_rizo.png",last_plot())
 
+ancom_genero<-ancombc2(hongos_rare,assay_name="counts",tax_level="Genus",fix_formula = "Altitud",rand_formula = "Tipo_muestra",pseudo = 1,group = "Altitud",alpha = 0.05)
