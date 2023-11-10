@@ -13,7 +13,7 @@ sig_table<-cbind(as(sig_table,"data.frame"),as(tax_table(hongos_rare)[rownames(s
 
 filo_DESeq<-phyloseq_to_deseq2(hongos_filosfera, ~ Altitud)
 
-diagdds_filo = DESeq(diagdds_filo, fitType="local",sfType = "poscounts")
+diagdds_filo = DESeq(filo_DESeq, fitType="local",sfType = "poscounts")
 
 resultados_DESeq_filo<-results(diagdds_filo,cooksCutoff = FALSE)
 sig_table_filo<-resultados_DESeq_filo[which(resultados_DESeq_filo$padj<0.05),]
@@ -26,18 +26,19 @@ sig_table_filo[sig_table_filo=="Orbiliales_fam_Incertae_sedis"]<-NA
 sig_table_filo[sig_table_filo=="Auriculariales_fam_Incertae_sedis"]<-NA
 
 
-x= tapply(sig_table_filo$log2FoldChange, sig_table_filo$Order, function(x) max(x))
-x = sort(x, TRUE)
-sig_table_filo$Order = factor(as.character(sig_table_filo$Order), levels=names(x))
-# Family order
-x = tapply(sig_table_filo$log2FoldChange, sig_table_filo$Family, function(x) max(x))
-x = sort(x, TRUE)
-sig_table_filo$Family = factor(as.character(sig_table_filo$Family), levels=names(x))
+x_filo= tapply(sig_table_filo$log2FoldChange, sig_table_filo$Order, function(x) max(x))
+x_filo = sort(x_filo, TRUE)
+sig_table_filo$Order = factor(as.character(sig_table_filo$Order), levels=names(x_filo))
 
-ggplot(sig_table_filo, aes(x=Family, y=log2FoldChange, color=Class)) + geom_point(size=2) + 
+# Family order
+x_filo = tapply(sig_table_filo$log2FoldChange, sig_table_filo$Family, function(x) max(x))
+x_filo = sort(x_filo, TRUE)
+sig_table_filo$Family = factor(as.character(sig_table_filo$Family), levels=names(x_filo))
+
+ggplot(sig_table_filo, aes(x=Family, y=log2FoldChange, color=Family)) + geom_point(size=2) + 
   theme_pubclean()+
   theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust=0.5))+
-  scale_color_manual(values=moma.colors("Warhol",11))+
+  scale_color_manual(values=moma.colors("Warhol",15))+
   theme(legend.position = "right")+
   ylab("LFC")+
   theme(axis.title = element_text(family="Rubik",face="bold",size=20))+

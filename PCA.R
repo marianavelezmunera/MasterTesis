@@ -12,13 +12,13 @@ pca_rizo_loadings<-data.frame(Variables=rownames(pca_rizo$rotation),pca_rizo$rot
 
 # Plots
 
-ggplot(pca_filo_tabla,aes(x=PC1,y=PC2,colour=Altitud))+
+pca_filosfera<-ggplot(pca_filo_tabla,aes(x=PC1,y=PC2,colour=Altitud))+
   geom_point()+
   geom_segment(data = pca_filo_loadings, aes(x = 0, y = 0, xend = (PC1*20),yend = (PC2*20)), arrow = arrow(length = unit(1/2, "picas")),color = "black",linewidth=0.1)+
   annotate("text", x = (pca_filo_loadings$PC1*22), y = (pca_filo_loadings$PC2*23),
-           label = c("Temperature (C°)","Light intensity (lux)","Relative humidity","pH","CE","Organic matter","N","Ctotal","Ptotal","P","K","Ca","Mg","Na","CIC","NO3","NH4","Fe"),family="Rubik")+
+           label = c("Temperatura (C°)","Intensidad de luz (lux)","Humedad relativa","pH","CE","Materia orgánica","N","Ctotal","Ptotal","P","K","Ca","Mg","Na","CIC","NO3","NH4","Fe"),family="Rubik")+
   ylab("PC2 (19.74%)")+xlab("PC1 (41.9%)")+
-  scale_colour_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  scale_colour_manual(name="Elevación",values=moma.colors("Warhol",5))+
   theme_pubr()+
   theme(legend.position = "right")+
   theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
@@ -27,20 +27,23 @@ ggplot(pca_filo_tabla,aes(x=PC1,y=PC2,colour=Altitud))+
   theme(legend.text = element_text(family = "Rubik",size=16))+
   theme()
 ggsave("pca_filo2.png",last_plot())
+pca_filosfera
 
-autoplot(pca_rizo)
-ggplot(pca_rizo_tabla,aes(x=PC1,y=PC2,colour=Altitud))+
+pca_rizo<-ggplot(pca_rizo_tabla,aes(x=PC1,y=PC2,colour=Altitud))+
   geom_point()+
   geom_segment(data = pca_rizo_loadings, aes(x = 0, y = 0, xend = (PC1*20),yend = (PC2*20)), arrow = arrow(length = unit(1/2, "picas")),color = "black",linewidth=0.1)+
   annotate("text", x = (pca_filo_loadings$PC1*22), y = (pca_filo_loadings$PC2*23),
-           label = c("Temperature (C°)","Light intensity (lux)","Relative humidity","pH","CE","Organic matter","N","Ctotal","Ptotal","P","K","Ca","Mg","Na","CIC","NO3","NH4","Fe"),family="Rubik")+
+           label = c("Temperatura (C°)","Intensidad de luz (lux)","Humedad relativa","pH","CE","Materia orgánica","N","Ctotal","Ptotal","P","K","Ca","Mg","Na","CIC","NO3","NH4","Fe"),family="Rubik")+
   ylab("PC2 (20.46%)")+xlab("PC1 (41.07%)")+
-  scale_colour_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  scale_colour_manual(name="Elevación",values=moma.colors("Warhol",5))+
   theme_pubr()+
   theme(legend.position = "right")+
   theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
   theme(axis.text = element_text(family = "Rubik",size=16))+
   theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
   theme(legend.text = element_text(family = "Rubik",size=16))+
-  theme()
-ggsave("pca_rizo2.png",last_plot())
+  theme()+
+  ggtitle("Rizósfera")+theme(plot.title = element_text(family="Rubik",size=16,face = "bold"))
+
+
+pca_completo

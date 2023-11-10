@@ -1,6 +1,7 @@
 ## CCA
 # CCA total
 
+
 order.sum = tapply(taxa_sums(hongos_rare), tax_table(hongos_rare)[, "Order"], sum, na.rm=TRUE)
 top10order = names(sort(order.sum, TRUE))[1:10]
 hongos_cca = prune_taxa((tax_table(hongos_rare)[, "Order"] %in% top10order), hongos_rare)
