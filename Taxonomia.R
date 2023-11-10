@@ -165,8 +165,18 @@ rizo_NA_orden<-plot_composition(orden_rizo_NA)+
 rizo_NA_orden
 ggsave("rizo_na_orden.png",last_plot())
 
+hongos_rare_taxo<-hongos_rare
+hongos_rare_taxo
+View(hongos_rare_taxo@sam_data)
+rownames(hongos_rare_taxo@sam_data)<-paste0(hongos_rare_taxo@sam_data$Altitud,sep="_",hongos_rare_taxo@sam_data$id)
+
+sample_names(hongos_rare_taxo)<-paste0(hongos_rare_taxo@sam_data$Altitud,sep="_",hongos_rare_taxo@sam_data$id)
+
+hongos_rare_taxo@sam_data$id<-paste0(hongos_rare_taxo@sam_data$Altitud,sep="_",hongos_rare_taxo@sam_data$id)
+
 total_NA<-microbiome::transform(aggregate_top_taxa2(subset_taxa(hongos_rare,!is.na(Order)),"Order",top=10),"compositional")
-NA_barras<-plot_composition(total_NA,group_by = "Tipo_muestra")+
+
+NA_barras<-plot_composition(total_NA,group_by = "Tipo_muestra",sample.sort = "Altitud")+
   theme_pubclean()+
   theme(legend.position = "right")+
   scale_fill_manual(name="Orden",values=moma.colors("Warhol",11))+
@@ -176,9 +186,8 @@ NA_barras<-plot_composition(total_NA,group_by = "Tipo_muestra")+
   theme(legend.text = element_text(family = "Rubik",size=14))+
   theme(legend.key.size = unit(0.5,"cm"))+
   ylab("Abundancia")+
-  xlab("Tipo de muestra")+
-  labs(caption = "Figura 2. Abundancia relativa de los diferentes órdenes presentes en las muestras")+
-  theme(plot.caption = element_text(family = "Rubik",size = 16,hjust = 0))
+  xlab("Muestra")
+
 
 ggsave("barras_todo.png",last_plot())
 NA_barras
