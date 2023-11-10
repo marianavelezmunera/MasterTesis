@@ -7,7 +7,8 @@ barras_filo_datos<-microbiome::transform(aggregate_top_taxa2(hongos_filosfera,"P
 barras_filo<-plot_composition(barras_filo_datos)+
   theme_pubclean()+
   theme(legend.position = "right")+
-  scale_fill_manual(name="Phylum",values=met.brewer("Klimt",11))+
+  ylab("Abundancia")+xlab("Muestra")+
+  scale_fill_manual(name="Filo",values=met.brewer("Klimt",11))+
   theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
   theme(axis.text = element_text(family = "Rubik",size=16))+
   theme(legend.title = element_text(family = "Rubik",face="bold",size=18))+
@@ -175,7 +176,10 @@ NA_barras<-plot_composition(total_NA,group_by = "Tipo_muestra")+
   theme(legend.text = element_text(family = "Rubik",size=14))+
   theme(legend.key.size = unit(0.5,"cm"))+
   ylab("Abundancia")+
-  xlab("Tipo de muestra")
+  xlab("Tipo de muestra")+
+  labs(caption = "Figura 2. Abundancia relativa de los diferentes órdenes presentes en las muestras")+
+  theme(plot.caption = element_text(family = "Rubik",size = 16,hjust = 0))
+
 ggsave("barras_todo.png",last_plot())
 NA_barras
 

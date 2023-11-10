@@ -1,6 +1,7 @@
 #Diversidad beta
-# PCoAs
 
+# PCoAs
+# Tipo de muestra
 pcoa.bray <- ordinate(hongos_rare, "PCoA", "bray")
 muestra_bray <- plot_ordination(hongos_rare, pcoa.bray, color= "Tipo_muestra")+
   theme_pubr()+
@@ -14,6 +15,7 @@ muestra_bray
 ggsave("bray_muestra.png",last_plot())
 
 pcoa.unifrac<-ordinate(hongos_rare,"PCoA","unifrac")
+
 muestra_uni<-plot_ordination(hongos_rare,pcoa.unifrac,shape = "Tipo_muestra",color="Altitud")+
   theme_pubr()+
   theme(legend.position = "right")+
@@ -22,9 +24,42 @@ muestra_uni<-plot_ordination(hongos_rare,pcoa.unifrac,shape = "Tipo_muestra",col
   theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
   theme(legend.text = element_text(family = "Rubik",size=16))+
   scale_color_manual(name="Elevación",values=moma.colors("Warhol",5))+
-  scale_shape(name="Tipo de muestra",labels=c("Filósfera","Rizósfera","Suelo"))
+  scale_shape(name="Tipo de muestra",labels=c("Filósfera","Rizósfera","Suelo"))+
+  labs(caption = "Figura 2. Análisis de Coordenadas Principales")+
+  theme(plot.caption = element_text(family = "Rubik",size = 16,hjust = 0))
+
 muestra_uni
 ggsave("uni_muestra_total.png",last_plot())
+
+# Tipo de muestra y parcela
+
+completo_bray<-plot_ordination(hongos_rare,pcoa.bray,shape = "Tipo_muestra",color="Altitud")+
+  theme_pubr()+
+  theme(legend.position = "right")+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
+  theme(legend.text = element_text(family = "Rubik",size=16))+
+  scale_color_manual(name="Elevación",values=moma.colors("Althoff",5))+
+  scale_shape(name="Tipo de muestra",labels=c("Filósfera","Rizósfera","Suelo"))+
+  ggtitle("Bray-Curtis")+theme(plot.title = element_text(family="Rubik",size=16,face = "bold"))
+
+completo_bray
+
+completo_uni<-plot_ordination(hongos_rare,pcoa.unifrac,shape = "Tipo_muestra",color="Altitud")+
+  theme_pubr()+
+  theme(legend.position = "right")+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
+  theme(axis.text = element_text(family = "Rubik",size=16))+
+  theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
+  theme(legend.text = element_text(family = "Rubik",size=16))+
+  scale_color_manual(name="Elevación",values=moma.colors("Althoff",5))+
+  scale_shape(name="Tipo de muestra",labels=c("Filósfera","Rizósfera","Suelo"))+
+  ggtitle("UniFrac")+theme(plot.title = element_text(family="Rubik",size=16,face = "bold"))
+completo_uni
+
+completo_beta<-completo_bray+completo_uni+plot_layout(ncol = 2, guides = "collect")
+ggsave("completo_beta.png",completo_beta)
 
 #PERMANOVA
 
@@ -35,8 +70,16 @@ perma_muestra
 perma_parce<-adonis2(t(hongos_rare@otu_table)~Altitud,data = metadatos_hongos[1:34,],method = "bray")
 perma_parce
 
-perma_total<-adonis2(t(hongos_rare@otu_table)~Tipo_muestra+Altitud,data = metadatos_hongos[1:34,],method = "bray")
-perma_total
+perma_total_bray<-adonis2(t(hongos_rare@otu_table)~Tipo_muestra*Altitud,data = metadatos_hongos[1:34,],method = "bray")
+
+unifrac.dist <- UniFrac(hongos_rare, 
+                        weighted = TRUE, 
+                        normalized = TRUE,  
+                        parallel = FALSE, 
+                        fast = TRUE)
+
+perma_total_uni <- adonis2(unifrac.dist ~ Tipo_muestra*Altitud, data = metadatos_hongos[1:34,])
+perma_total_uni
 # Desagreguemos por muestra para la de las parcelas
 
 
@@ -56,22 +99,24 @@ pcoa.unifrac.filo<-ordinate(hongos_filosfera,"PCoA","unifrac")
 bray.filo<-plot_ordination(hongos_filosfera,pcoa.bray.filo,color="Altitud")+
   theme_pubr()+
   theme(legend.position = "right")+
-  scale_color_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  scale_color_manual(name="Elevation",values=moma.colors("Althoff",5))+
   theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
   theme(axis.text = element_text(family = "Rubik",size=16))+
   theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
-  theme(legend.text = element_text(family = "Rubik",size=16))
+  theme(legend.text = element_text(family = "Rubik",size=16))+
+  ggtitle("Bray-Curtis filósfera")+theme(plot.title = element_text(family="Rubik",size=16,face = "bold"))
 bray.filo
 ggsave("bray_filo.png",last_plot())
 
 unifrac.filo<-plot_ordination(hongos_filosfera,pcoa.unifrac.filo,color = "Altitud")+
   theme_pubr()+
   theme(legend.position = "right")+
-  scale_color_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  scale_color_manual(name="Elevation",values=moma.colors("Althoff",5))+
   theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
   theme(axis.text = element_text(family = "Rubik",size=16))+
   theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
-  theme(legend.text = element_text(family = "Rubik",size=16))
+  theme(legend.text = element_text(family = "Rubik",size=16))+
+  ggtitle("UniFrac filósfera")+theme(plot.title = element_text(family="Rubik",size=16,face = "bold"))
 unifrac.filo
 ggsave("uni_filo.png",last_plot())
 
@@ -82,24 +127,29 @@ pcoa.unifrac.rizo<-ordinate(hongos_rizosfera,"PCoA","unifrac")
 bray.rizo<-plot_ordination(hongos_rizosfera,pcoa.bray.rizo,color="Altitud")+
   theme_pubr()+
   theme(legend.position = "right")+
-  scale_color_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  scale_color_manual(name="Elevation",values=moma.colors("Althoff",5))+
   theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
   theme(axis.text = element_text(family = "Rubik",size=16))+
   theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
-  theme(legend.text = element_text(family = "Rubik",size=16))
+  theme(legend.text = element_text(family = "Rubik",size=16))+
+  ggtitle("Bray-Curtis rizósfera")+theme(plot.title = element_text(family="Rubik",size=16,face = "bold"))
 bray.rizo
 ggsave("bray_rizo.png",last_plot())
 
 unifrac.rizo<-plot_ordination(hongos_rizosfera,pcoa.unifrac.rizo,color = "Altitud")+
   theme_pubr()+
   theme(legend.position = "right")+
-  scale_color_manual(name="Elevation",values=met.brewer("Klimt",5))+
+  scale_color_manual(name="Elevation",values=moma.colors("Althoff",5))+
   theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
   theme(axis.text = element_text(family = "Rubik",size=16))+
   theme(legend.title = element_text(family = "Rubik",face="bold",size=20))+
-  theme(legend.text = element_text(family = "Rubik",size=16))
+  theme(legend.text = element_text(family = "Rubik",size=16))+
+  ggtitle("UniFrac rizósfera")+theme(plot.title = element_text(family="Rubik",size=16,face = "bold"))
 unifrac.rizo
-ggsave("uni_rizo.png",last_plot())
+
+pcoas_individuales<-bray.filo+unifrac.filo+bray.rizo+unifrac.rizo+plot_layout(guides = "collect")
+pcoas_individuales
+ggsave("pcoas_individuales.png",pcoas_individuales)
 
 # ANOSIMs 
 
@@ -201,5 +251,4 @@ tabla_perma_completa<-tabla_perma_completa%>%
   opt_table_lines(extent = "none")
 gtsave(tabla_perma_completa,"tabla_perma_completa.png")
 
-pagedown::chrome_print("Poster/Poster.Rmd")
 

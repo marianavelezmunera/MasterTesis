@@ -81,6 +81,42 @@ ggplot(data = diversidad_alfa,aes(x=Altitud, y=faith_pd,fill=Altitud))+
   theme(axis.text = element_text(family = "Rubik",size=16))
 ggsave("faith_elevation.png",last_plot())
 
+# Gráficos completos
+# Faith's completo
+
+faith_completo<-ggplot(data = diversidad_alfa,aes(x=Altitud,y=faith_pd,fill=Tipo_muestra))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Elevación")+ylab("Faith's PD")+
+  theme(legend.position = "bottom")+
+  scale_fill_manual(name="Tipo de muestra", label=c("Filósfera","Rizósfera","Suelo"),values=moma.colors("Warhol",3))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=32))+
+  theme(axis.text = element_text(family = "Rubik",size=24))+
+  theme(legend.title = element_text(family = "Rubik",face = "bold",size = 24))+
+  theme(legend.text = element_text(family = "Rubik",size = 16))
+faith_completo
+
+# Shannon completo
+
+shannon_completo<-ggplot(data = diversidad_alfa,aes(x=Altitud,y=diversity_shannon,fill=Tipo_muestra))+
+  geom_boxplot(color="black")+
+  theme_pubclean()+
+  xlab("Elevación")+ylab("Índice de Shannon")+
+  theme(legend.position = "bottom")+
+  scale_fill_manual(name="Tipo de muestra", label=c("Filósfera","Rizósfera","Suelo"),values=moma.colors("Warhol",3))+
+  theme(axis.title = element_text(family = "Rubik",face = "bold",size=32))+
+  theme(axis.text = element_text(family = "Rubik",size=24))+
+  theme(legend.title = element_text(family = "Rubik",face = "bold",size = 24))+
+  theme(legend.text = element_text(family = "Rubik",size = 16))
+shannon_completo
+
+#Patchwork de ambos gráficos
+
+completo_alfa<-shannon_completo+faith_completo+plot_layout(ncol = 2, guides = "collect") & 
+  theme(legend.position = "bottom")
+completo_alfa
+ggsave("completo_alfa.png",completo_alfa)
+
 ## Análisis estadísticos
 
 #Parcela vs observed
@@ -130,6 +166,16 @@ summary(muestra_shannon)
 TukeyHSD(muestra_shannon)
 leveneTest(diversidad_alfa$diversity_shannon,diversidad_alfa$Tipo_muestra)
 
+# ANOVAS de dos vías
+
+anova_completo_shannon<-aov(diversity_shannon~Tipo_muestra*Parcela,data = diversidad_alfa)
+summary(anova_completo_shannon)
+
+anova_completo_faith<-aov(faith_pd~Tipo_muestra*Parcela,data = diversidad_alfa)
+summary(anova_completo_faith)
+
+# Tablas 
+
 modelos<-c("Richness ~ Elevation","Shannon ~ Elevation","Faith's PD ~ Elevation","Richness ~ Sample type","Shannon ~ Sample type","Faith's PD ~ Sample type")
 valor_F<-c(2.23,1.603,1.176,1.5,4.611,0.671)
 valor_P<-c(0.0902,0.2,0.342,0.239,0.0177,0.518)
@@ -142,36 +188,6 @@ tabla_anova<-tabla_anova %>%
   gtExtras::gt_theme_pff()
 gtsave(tabla_anova,"tabla_anova.png")
 tabla_anova
-
-ggplot(data = diversidad_alfa,aes(x=Tipo_muestra,y=faith_pd,fill=Parcela))+
-  geom_boxplot(color="black")+
-  theme_pubclean()+
-  xlab("Sample type")+ylab("Faith's PD")+
-  theme(legend.position = "none")+
-  scale_fill_manual(values=met.brewer("Klimt",5))+
-  scale_x_discrete(labels=c("Phyllosphere","Rhizosphere","Bulk soil"))+
-  theme(axis.title = element_text(family = "Rubik",face = "bold",size=24))+
-  theme(axis.text = element_text(family = "Rubik",size=16))
-ggsave("faith_sample.png",last_plot())
-
-unique(diversidad_alfa$Parcela)
-
-ggplot(data = diversidad_alfa,aes(x=Altitud,y=diversity_shannon,fill=Tipo_muestra))+
-  geom_boxplot(color="black")+
-  theme_pubclean()+
-  xlab("Elevación")+ylab("Índice de Shannon")+
-  theme(legend.position = "right")+
-  scale_fill_manual(name="Tipo de muestra", label=c("Filósfera","Rizósfera","Suelo"),values=moma.colors("Warhol",3))+
-  theme(axis.title = element_text(family = "Rubik",face = "bold",size=32))+
-  theme(axis.text = element_text(family = "Rubik",size=24))+
-  theme(legend.title = element_text(family = "Rubik",face = "bold",size = 24))+
-  theme(legend.text = element_text(family = "Rubik",size = 16))
-
-ggsave("boxplot_todo.png",last_plot())
-
-
-anova_completo<-aov(diversity_shannon~Tipo_muestra+Parcela,data = diversidad_alfa)
-summary(anova_completo)
 
 anova_datos<-data.frame(Df=c(2,4,27),Sum_sq=c(2.16,1.79,5.47),F_val=c(5.33,2.21,NA),p=c(0.001,0.09,NA))
 colnames(anova_datos)<-c("Df","SumOfSqs","F","Pr(>F)")
@@ -229,6 +245,4 @@ tabla_anova_completa<-tabla_anova_completa%>%
   tab_style(style=cell_borders("all",color="black",weight = px(2)),
             locations = cells_stub())
 gtsave(tabla_anova_completa,"tabla_anova_completa.png")
-
-pagedown::chrome_print("Poster/Poster.Rmd")
 
